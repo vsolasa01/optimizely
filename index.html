@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+   <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ouibounce/0.0.12/ouibounce.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.js"></script>
+
+
+</head>
+<body>
+
+    <div id="ouibounce-modal" style="display:none;">
+        <div class="modal">
+            <div class="modal-title">
+                <h3> WAIT! SPECIAL OFFER FOR <span id="city"></span> RESIDENTS</h3>
+            </div>
+            <div class="modal-body">
+                <h1>Claim your instant discount <br/> before the timer runs out!</h1>
+                <div class="timer">
+                    <span class="timerRunning"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button>CLAIM DISCOUNT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ajax request for city name
+        var xhttp= new XMLHttpRequest();
+        xhttp.onreadystatechange=function(){
+            var obj=JSON.parse(xhttp.responseText)
+            document.getElementById("city").innerHTML=obj.city;
+        };
+        xhttp.open("GET","http://freegeoip.net/json/",true);
+        xhttp.send();
+
+        //Timer
+        var clock = $('.timerRunning').FlipClock({
+// ... your options here
+        });
+
+        clock.setTime(3599);
+        clock.setCountdown(true);
+
+        //modal
+
+
+        // if you want to use the 'fire' or 'disable' fn,
+        // you need to save OuiBounce to an object
+        var _ouibounce = ouibounce(document.getElementById('ouibounce-modal'), {
+            aggressive: true,
+            timer: 0,
+            callback: function() { console.log('ouibounce fired!'); }
+        });
+
+        $('body').on('click', function() {
+            $('#ouibounce-modal').hide();
+        });
+
+        $('#ouibounce-modal .modal-footer').on('click', function() {
+            $('#ouibounce-modal').hide();
+        });
+
+        $('#ouibounce-modal .modal').on('click', function(e) {
+            e.stopPropagation();
+        });
+
+    </script>
+
+</body>
+</html>
